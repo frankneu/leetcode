@@ -1,8 +1,8 @@
 package main
 
 func main() {
-	var nums1 = []int{1, 2, 3, 4, 5}
-	var nums2 = []int{}
+	var nums1 = []int{1, 2}
+	var nums2 = []int{3, 4, 5, 6}
 	println(findMedianSortedArrays(nums1, nums2))
 }
 
@@ -22,54 +22,56 @@ The median is (2 + 3)/2 = 2.5
 https://leetcode.com/problems/median-of-two-sorted-arrays/solution/
 */
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
-	start1, start2 := 0, 0
-	end1 := len(nums1)
-	end2 := len(nums2)
-	value1, value2 := 0, 0
-	var result float64 = 0.0
-	for start1 < end1 || start2 < end2 {
-		min1, min2, max1, max2 := 0, 0, 0, 0
-		if start1 < len(nums1) {
-			min1 = nums1[start1]
-		}
-		if end1 < len(nums1) {
-			max1 = nums1[end1]
-		}
-		if start2 < len(nums1) {
-			min2 = nums1[start2]
-		}
-		if end2 < len(nums1) {
-			max2 = nums1[end2]
-		}
-		if min1 >= max2 {
-			offset := (end1 - start1 + end2 - start2) / 2
-			if offset > end2-start2 {
-				value1 = nums1[start1+offset-end2+start2]
-				value2 = nums1[start1+offset-end2+start2+1]
-			} else if offset < end2-start2 {
-				value1 = nums2[start2+offset]
-				value2 = nums2[start2+offset+1]
+	m, n := len(nums1), len(nums2)
+	if m > n {
+		nums1, nums2, m, n = nums2, nums1, n, m
+	}
+	imin, imax, half_len := 0, m, (m+n+1)/2
+	for imin <= imax {
+		i := (imin + imax) / 2
+		j := half_len - i
+		if i < m && nums2[j-1] > nums1[i] {
+			imin = i + 1
+		} else if i > 0 && nums1[i-1] > nums2[j] {
+			imax = i - 1
+		} else {
+			max_of_left := 0
+			min_of_right := 0
+			if i == 0 {
+				max_of_left = nums2[j-1]
+			} else if j == 0 {
+				max_of_left = nums1[i-1]
 			} else {
-				value1 = nums2[end2]
-				value2 = nums2[start2+offset+1]
+				max_of_left = max(nums1[i-1], nums2[j-1])
 			}
-		}
-		if min2 >= max1 {
-			offset := (end1 - start1 + end2 - start2) / 2
-			if offset > end1-start1 {
-				value1 = nums2[start2+offset-end1+start1]
-				value2 = nums2[start2+offset-end1+start1+1]
+			if (m+n)%2 == 1 {
+				return float64(max_of_left)
+			}
+			if i == m {
+				min_of_right = nums2[j]
+			} else if j == n {
+				min_of_right = nums1[i]
 			} else {
-				value1 = nums1[start1+offset-end2+start2]
-				value2 = nums1[start1+offset-end1+start1+1]
+				min_of_right = min(nums1[i], nums2[j])
 			}
+			return float64(max_of_left+min_of_right) / 2.0
 		}
 	}
-	length := len(nums1) + len(nums2)
-	if length%2 == 1 {
-		result = float64(value1+value2) / 2
+	return 0.0
+}
+
+func max(a int, b int) int {
+	if a > b {
+		return a
 	} else {
-		result = float64(value1)
+		return b
 	}
-	return result
+}
+
+func min(a int, b int) int {
+	if a > b {
+		return b
+	} else {
+		return a
+	}
 }
