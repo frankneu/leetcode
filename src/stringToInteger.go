@@ -1,8 +1,25 @@
 package main
 
+func main() {
 
-func main(){
-	print(myAtoi("42"))
+	println(myAtoi("-13-2"))
+	println(myAtoi("1-2"))
+	println(myAtoi("- 912"))
+	println(myAtoi("-91283472332"))
+	println(myAtoi("-2147483648"))
+	println(myAtoi("-2147483647"))
+	println(myAtoi("2147483647"))
+	println(myAtoi("2147483648"))
+	println(myAtoi("9223372036854775808"))
+	println(myAtoi("  987"))
+	println(myAtoi("-3 1"))
+	println(myAtoi("-0 1"))
+	println(myAtoi("-42.11"))
+	println(myAtoi("-42w11"))
+	println(myAtoi("+-987-"))
+	println(myAtoi("+987-"))
+	println(myAtoi("-4193 with words"))
+	println(myAtoi("words and 987"))
 }
 
 /**
@@ -36,24 +53,64 @@ Input: "-91283472332"
 Output: -2147483648
 Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
              Thefore INT_MIN (−231) is returned.
- */
-func myAtoi(str string) string {
+*/
+const maxUint = ^uint32(0)
+const maxInt = int(maxUint >> 1)
+const minInt = -maxInt - 1
+
+func myAtoi(str string) int {
 	i := 0
-	var result_str string
+	var result int
 	digital := false
-	for ;i<len(str); i++{
-		if str[i] == 43 || str[i] == 45{
-			result_str += string(str[i])
+	space := false
+	nodigital_char := false
+	sign := true
+	signed := false
+	exced := false
+	for ; i < len(str); i++ {
+		value := int(str[i])
+		if value == 32 && (digital || signed) {
+			space = true
+			continue
+		}
+		if value == 43 || value == 45 {
+			if digital {
+				break
+			}
+			if signed && !digital {
+				return 0
+			}
+			if !signed && value == 45 {
+				sign = false
+			}
+			signed = true
+			continue
+		}
+		if value > 47 && value < 58 {
+			if !space && !nodigital_char {
+				result *= 10
+				result += value - 48
+				if result > maxInt {
+					exced = true
+				}
+			}
 			digital = true
 			continue
 		}
-		if str[i]>47 && str[i] < 58 && digital{
-			result_str += string(str[i])
-			continue
+		if digital {
+			nodigital_char = true
+		} else if value != 32 {
+			return 0
 		}
-		digital = false
 	}
-	return result_str
+	if !sign {
+		result = -result
+	}
+	if exced && sign {
+		return maxInt
+	}
+	if exced && !sign {
+		return minInt
+	}
+	return result
 }
-
-
