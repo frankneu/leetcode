@@ -3,12 +3,33 @@ package main
 /**
 https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/
 */
-//使用最小堆做排序
-func kthSmallestV1(matrix [][]int, k int) int {
-
+//二分查找
+func kthSmallest(matrix [][]int, k int) int {
+	n := len(matrix)
+	lo := matrix[0][0]
+	hi := matrix[n-1][n-1]
+	var mid, count int
+	for lo < hi {
+		mid = lo + (hi-lo)/2
+		count = countLEQ(matrix, mid)
+		if count < k {
+			lo = mid + 1
+		} else {
+			hi = mid
+		}
+	}
+	return lo
 }
 
-//使用二分查找，找到一个中间节点后，在各个行上计算比中间节点小的元素数
-func kthSmallestV2(matrix [][]int, k int) int {
-
+//计算矩阵中在X左侧的元素数
+func countLEQ(matrix [][]int, x int) int {
+	n := len(matrix)
+	count := 0
+	var j int
+	for _, row := range matrix {
+		for j = 0; j < n && row[j] <= x; j++ {
+		}
+		count += j
+	}
+	return count
 }
