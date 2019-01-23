@@ -28,3 +28,11 @@ func ShellSort(a []int) {
 func swap(slice []int, i int, j int) {
 	slice[i], slice[j] = slice[j], slice[i]
 }
+
+func main() {
+	nums := []int{7, 6, 2, 1, 8, 5, 3}
+	ShellSort(nums)
+	for i := 0; i < len(nums); i++ {
+		println(nums[i])
+	}
+}
