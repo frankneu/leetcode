@@ -3,6 +3,7 @@ package main
 import "container/list"
 
 /**
+https://leetcode.com/problems/binary-tree-inorder-traversal/
 基本过程与前序遍历相同，不同之处在于访问的顺序移到出栈时。
 1. 找到左子树
 2. 左子树为空的时候从栈中取出站定元素，然后遍历
