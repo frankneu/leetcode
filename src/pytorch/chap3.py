@@ -68,7 +68,7 @@ file_w.close()
 
 file_r = h5py.File("contiguous.hdf5", "r")
 file_read_numpy = file_r["contiguous"]
-# ???
-tensor_from_h5py = torch.from_numpy(file_read_numpy[-2 :])
+# 通过from_numpy把数组转换为张量，从文本中读取的数据类型为dataset, 需要转换为np.ndarray
+tensor_from_h5py = torch.from_numpy(file_read_numpy[:])
 print(tensor_from_h5py.size())
 file_r.close()
