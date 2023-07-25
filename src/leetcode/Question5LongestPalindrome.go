@@ -1,7 +1,7 @@
 package main
 
 func main() {
-	print(longestPalindrome("cbbd"))
+	print(longestPalindromeV2("cbbd"))
 }
 
 /**
@@ -67,4 +67,39 @@ func checkPalindrome(s string) bool {
 		j--
 	}
 	return true
+}
+
+func longestPalindromeV2(s string) string {
+	var flag = make([][]bool, len(s))
+	begin := 0
+	tail := 0
+	for ; tail < len(s); tail++ {
+		flag[tail] = make([]bool, len(s))
+		for begin = 0; begin <= tail; begin++ {
+			if begin == tail {
+				flag[begin][tail] = true
+				continue
+			}
+			if begin+1 == tail && s[begin] == s[tail] {
+				flag[begin][tail] = true
+				continue
+			}
+			flag[begin][tail] = (s[begin] == s[tail]) && flag[begin+1][tail-1]
+		}
+	}
+	longest := 0
+	start := 0
+	end := 0
+	begin = 0
+	tail = len(s) - 1
+	for ; tail >= 0; tail-- {
+		for begin = 0; begin <= tail; begin++ {
+			if flag[begin][tail] && longest < tail-begin+1 {
+				start = begin
+				end = tail
+				longest = tail - begin
+			}
+		}
+	}
+	return s[start : end+1]
 }
