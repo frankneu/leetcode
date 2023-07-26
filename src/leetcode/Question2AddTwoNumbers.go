@@ -29,14 +29,11 @@ other test case:
 0 123
 */
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	index := new(ListNode)
-	index.Val = 0
-	index.Next = nil
-	var start *ListNode = index
-	var before *ListNode = index
-	var dig int = 0
+	var result *ListNode
+	var before = result
+	var dig = 0
 	for l1 != nil || l2 != nil {
-		var current int = index.Val
+		var current = 0
 		if l1 != nil {
 			current += l1.Val
 			l1 = l1.Next
@@ -52,18 +49,17 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		} else {
 			dig = 0
 		}
-		index.Val = current
-		index.Next = &ListNode{0, nil}
+		var index = &ListNode{current, nil}
+		if nil != before {
+			before.Next = index
+		}
+		if nil == result {
+			result = index
+		}
 		before = index
-		index = index.Next
 	}
 	if dig == 1 {
-		index.Val = dig
-		index.Next = nil
-		before = index
+		before.Next = &ListNode{1, nil}
 	}
-	if (*index).Val == 0 {
-		(*before).Next = nil
-	}
-	return start
+	return result
 }

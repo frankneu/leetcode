@@ -75,3 +75,39 @@ func min(a int, b int) int {
 		return a
 	}
 }
+
+func findMedianSortedArraysV2(nums1 []int, nums2 []int) float64 {
+	m, n := len(nums1), len(nums2)
+	k := (m + n) / 2
+	for k > 2 {
+		if nums1[k/2] > nums2[k/2] {
+			nums2 = nums2[k/2:]
+		} else {
+			nums1 = nums1[k/2:]
+		}
+		k = k - k/2
+	}
+	if k == 2 {
+		return
+	}
+	return 0.0
+}
+
+func findK(nums1 []int, nums2 []int, k int, p int) float64 {
+	m, n := len(nums1), len(nums2)
+
+	if nums1[k/2] > nums2[k/2] {
+		nums2 = nums2[k/2:]
+	} else {
+		nums1 = nums1[k/2:]
+	}
+	k = k - k/2
+
+	for k > 2 {
+
+	}
+	if k == 2 {
+		return
+	}
+	return 0.0
+}
