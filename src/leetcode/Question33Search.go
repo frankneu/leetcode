@@ -64,13 +64,15 @@ func searchByOthers(nums []int, target int) int {
 		if target == nums[k] {
 			return k
 		}
-		if nums[k] < nums[j] {
+		//情况1. k在翻转点的左侧
+		//情况2. k在翻转点右侧
+		if nums[k] < nums[j] { //判断为情况1
 			if nums[k] < target && nums[j] >= target {
 				i = k + 1
 			} else {
 				j = k - 1
 			}
-		} else {
+		} else { //判断为情况2
 			if nums[i] <= target && target < nums[k] {
 				j = k - 1
 			} else {
@@ -82,6 +84,6 @@ func searchByOthers(nums []int, target int) int {
 }
 
 func main() {
-	nums := []int{3}
-	println(searchByOthers(nums, 3))
+	nums := []int{5, 1, 3}
+	println(searchByMy(nums, 5))
 }

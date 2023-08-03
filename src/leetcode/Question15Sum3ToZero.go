@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	res := threeSum([]int{-1, 0, 1, 2, -1, -4})
+	res := threeSumV3([]int{-1, 0, 1, 2, -1, -4})
 	//res = threeSum([]int{-2,0,0,2,2})
 	for index, value := range res {
 		fmt.Print(index, ":")
@@ -89,4 +89,48 @@ func threeSumOthers(nums []int) [][]int {
 		}
 	}
 	return solution
+}
+
+func threeSumV3(nums []int) [][]int {
+	length := len(nums)
+	solution := make([][]int, 0)
+	if length < 3 {
+		return solution
+	}
+	sort.Ints(nums)
+	start := 0
+	end := len(nums) - 1
+	leftOrRight := true
+	for start < end {
+		response := findTarget(nums, start, end, -nums[start]-nums[end], solution)
+		if nil != response {
+			solution = append(solution, response)
+		}
+		if leftOrRight {
+			start++
+		} else {
+			end--
+		}
+		leftOrRight = !leftOrRight
+	}
+	return solution
+}
+
+func findTarget(nums []int, left int, right int, target int, result [][]int) []int {
+	v1 := nums[left]
+	v2 := nums[right]
+	left += 1
+	right -= 1
+	for left <= right {
+		mid := (left + right) / 2
+		if target == nums[mid] {
+			return []int{v1, v2, nums[mid]}
+		}
+		if target > nums[mid] {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return nil
 }
