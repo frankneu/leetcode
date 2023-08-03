@@ -85,5 +85,5 @@ func searchByOthers(nums []int, target int) int {
 
 func main() {
 	nums := []int{5, 1, 3}
-	println(searchByMy(nums, 5))
+	println(search(nums, 5))
 }
